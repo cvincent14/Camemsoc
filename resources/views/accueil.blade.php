@@ -7,10 +7,10 @@
     </head>
     <body>
         <div class="container">
-
-
-
-<a href="/diagram"> Diagramme numéro 1</a>
-</div>
+            <h1>Liste des diagrammes</h1>
+            <p><a href="/diagram1"> Diagramme numéro 1</a></p>
+            <p><a href="/diagram2"> Diagramme numéro 2</a></p>
+            <p><a href="/diagram3"> Diagramme numéro 3</a></p>
+        </div>
     </body>
 </html>

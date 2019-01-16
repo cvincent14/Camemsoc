@@ -14,17 +14,9 @@
 
 @foreach($detailMonthSociety as $uneSocieteMois)
                     
-    <?php   $mouthSociety[] = $uneSocieteMois -> mois;
+    <?php   $mouthSociety[] = $uneSocieteMois -> mois."/ ".$uneSocieteMois -> annee;
             $totalMoisHtBcSociety[] = $uneSocieteMois -> TotalHt  ;
 
-            if(!(empty($mouthSociety))){
-                
-                dump("pleine");
-            }
-            else
-            {
-                dump('vide');
-            }
         ?>
 @endforeach
 @foreach($listSociety as $uneSociety)
@@ -54,12 +46,10 @@
         </select>
         <input type="submit" value="Submit">
     </form>
-    @if($formulaire == true) 
+
         <canvas id="Diagram3"></canvas>
-    @endif
-</div>
 
 </div>
 
-            
+         
 @endsection

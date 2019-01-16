@@ -13,15 +13,14 @@
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
         <script>    
-            var formulaire = {{ $formulaire }}
-            var recupName = @json($nameSociety);
-            var recupId = @json($totalHtBcSociety);
             var recupMois = @json($mois);
             var recupTotalMoisHtBc = @json($totalMoisHtBc);
             var recupMouthSociety = @json($mouthSociety);
             var recupTotalMoisHtBcSociety = @json($totalMoisHtBcSociety);
         </script>
-        <script src="{{ asset('js/app.js') }}"></script>
+        
+        <script src="js/diagram2.js"></script>
+        <script src="js/diagram3.js"></script>
 
             <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
         
