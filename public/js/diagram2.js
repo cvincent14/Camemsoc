@@ -1,4 +1,3 @@
-
 var ctx2 = document.getElementById('Diagram2').getContext('2d');
 
 var BarChart1 = new Chart(ctx2, {

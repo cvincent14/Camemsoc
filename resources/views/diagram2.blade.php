@@ -1,17 +1,5 @@
-<!doctype html>
-<html lang="fr">
-    <head>
-        <meta charset="utf-8">
-        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-        <title>Camemsoci</title>
-    </head>
-    <body>
-        <div id="app"></div>
-
-        @foreach($detailMonth as $unMois)
-            <?php $mois[] = $unMois -> mois."/ ".$unMois -> annee ?>   
-            <?php $totalMoisHtBc[] = $unMois -> TotalHt ?> 
-        @endforeach
+@extends('accueil')
+@section('content')
 
         <div class="chart-container" style="position: relative; height:30vh; width:30vw">
             <h3>Graphe sur les dépenses des 12 derniers mois</h3>
@@ -27,6 +15,5 @@
         </script>
         <script src="{{ asset('js/app.js') }}"></script>
         <script src="js/diagram2.js"></script>
-        
-    </body>
-</html>
+
+@endsection

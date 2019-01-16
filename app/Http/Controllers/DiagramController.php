@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Routing\Redirector;
 use App\Bon;
 use App\Fournisseur;
 use DB;
@@ -26,8 +27,15 @@ class DiagramController extends Controller
             Order by somme_total_ht_bc desc
             LIMIT :limit', ['limit' => $limit]);
 
+        foreach($bonFiltre as $unBon)
+        {
+                $nameSociety[] = $unBon -> societe ;
+                $totalHtBcSociety[] = $unBon -> somme_total_ht_bc  ;            
+        }
+
         return view('diagram1', [
-            'lesBons' => $bonFiltre,
+            'nameSociety' => $nameSociety,
+            'totalHtBcSociety' => $totalHtBcSociety,
         ]);
     }
 
@@ -39,8 +47,15 @@ class DiagramController extends Controller
             WHERE YEAR(CAST(NOW() AS DATE)) <= YEAR(validation_dateheure) +1
             GROUP BY annee, mois');
 
+        foreach($detailMonth as $unMois)
+        {
+            $mois[] = $unMois -> mois."/ ".$unMois -> annee ;  
+            $totalMoisHtBc[] = $unMois -> TotalHt ;
+        }
+
         return view('diagram2', [
-            'detailMonth' => $detailMonth,
+            'mois' => $mois,
+            'totalMoisHtBc' => $totalMoisHtBc,
         ]); 
     }
 
@@ -54,48 +69,50 @@ class DiagramController extends Controller
             GROUP BY societe
             Order by somme_total_ht_bc');
 
+        foreach($listSociety as $uneSociety)
+        {
+            $companyNames[] = $uneSociety -> societe;
+        }
+
         return view('formulaireDiagram3', [
-            'listSociety' => $listSociety,
+            'companyNames' => $companyNames,
         ]);
     }
     
-    public function recoveryDiagram3()
+    public function recoveryDiagram3($nameSociety)
     {
-              
-        $detailMonthSociety;
 
         $detailMonthSociety = DB::select(
-        'SELECT SUM(total_ht_bc) AS TotalHt, MONTH(validation_dateheure) AS mois, YEAR(validation_dateheure) AS annee
-        FROM bon, fournisseur
-        WHERE bon.id_fournisseur = fournisseur.IDfournisseur
-        AND YEAR(CAST(NOW() AS DATE)) <= YEAR(validation_dateheure) +1
-        AND societe LIKE "AMMI.DSI"
-        GROUP BY annee, mois');    
+            'SELECT SUM(total_ht_bc) AS TotalHt, MONTH(validation_dateheure) AS mois, YEAR(validation_dateheure) AS annee
+            FROM bon, fournisseur
+            WHERE bon.id_fournisseur = fournisseur.IDfournisseur
+            AND YEAR(CAST(NOW() AS DATE)) <= YEAR(validation_dateheure) +1
+            AND societe LIKE :nameSociety
+            GROUP BY annee, mois', ['nameSociety' => $nameSociety]);
+           
+        foreach($detailMonthSociety as $uneSocieteMois){
+                          
+            $mouthSociety[] = $uneSocieteMois -> mois;
+            $totalMoisHtBcSociety[] = $uneSocieteMois -> TotalHt  ;
+        } 
+
+        if(empty($mouthSociety)){
+            $mouthSociety[] = "erreur";
+            $totalMoisHtBcSociety[] = "erreur"  ;
+        }
 
         return view('diagram3', [
-            'detailMonthSociety' => $detailMonthSociety,
+            'mouthSociety' => $mouthSociety,
+            'totalMoisHtBcSociety' => $totalMoisHtBcSociety,
+            'nameSociety' => $nameSociety,
         ]);        
     }
+
     public function sendSocieteTotalHt()
     {
         $nameSociety = request('maliste');
         $nameSociety = str_replace('_', ' ', $nameSociety);
-
-        $detailMonthSociety = DB::select(
-        'SELECT SUM(total_ht_bc) AS TotalHt, MONTH(validation_dateheure) AS mois, YEAR(validation_dateheure) AS annee
-        FROM bon, fournisseur
-        WHERE bon.id_fournisseur = fournisseur.IDfournisseur
-        AND YEAR(CAST(NOW() AS DATE)) <= YEAR(validation_dateheure) +1
-        AND societe LIKE :nameSociety
-        GROUP BY annee, mois', ['nameSociety' => $nameSociety]);
-       
-        foreach($detailMonthSociety as $uneSocieteMois){
-                    
-            $mouthSociety[] = $uneSocieteMois -> mois;
-            $totalMoisHtBcSociety[] = $uneSocieteMois -> TotalHt  ;
-        }
-
-        $formulaire = true;
-        return redirect() ->route('/diagram3', ['nameSociety' => $nameSociety]);
+        
+        return redirect()->route('diagram3', ['nameSociety' => $nameSociety]);
     }
 }
