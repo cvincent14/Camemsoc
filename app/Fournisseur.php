@@ -8,7 +8,9 @@ class Fournisseur extends Model
 {
     protected $table = 'fournisseur';
 
-    public function fournisseur() {
-        return $this->belongsTo(Fournisseur::class);
+    public function bons()
+    {
+        return $this->hasMany('App\Bon');
     }
+
 }

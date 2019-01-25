@@ -1,7 +1,7 @@
 var randomColor = require('randomcolor');
 
 var color = randomColor();
-var size = compteur.length;
+var size = 1;
 tableColor = [color];
 
 for(var i = 0; i < size ; i++)
@@ -14,4 +14,5 @@ randomColor({
     luminosity: 'light',
     hue: 'random'
  });
+ 
  

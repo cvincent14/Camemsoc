@@ -15,7 +15,7 @@ class DiagramController extends Controller
 
     public function recoveryDiagram1()
     {
-        $limit = 10;  
+        $limit = 20;  
 
         $bonFiltre = DB::select(
             'SELECT societe, SUM(total_ht_bc) as somme_total_ht_bc
@@ -29,8 +29,8 @@ class DiagramController extends Controller
 
         foreach($bonFiltre as $unBon)
         {
-                $nameSociety[] = $unBon -> societe ;
-                $totalHtBcSociety[] = $unBon -> somme_total_ht_bc  ;            
+            $nameSociety[] = $unBon -> societe ;
+            $totalHtBcSociety[] = $unBon -> somme_total_ht_bc  ;            
         }
 
         return view('diagram1', [
@@ -61,25 +61,15 @@ class DiagramController extends Controller
 
     public function formulaireDiagram3()
     {
-        $listSociety = DB::select(
-            'SELECT societe, SUM(total_ht_bc) as somme_total_ht_bc
-            FROM bon, fournisseur
-            WHERE bon.id_fournisseur = fournisseur.IDfournisseur
-            AND validation_etat >= 4
-            GROUP BY societe
-            Order by somme_total_ht_bc');
+        $listSociety = Fournisseur::All();
 
-        foreach($listSociety as $uneSociety)
-        {
-            $companyNames[] = $uneSociety -> societe;
-        }
+        return view('diagramTotalHtParSociete', [
+            'listSociety' => $listSociety,
 
-        return view('formulaireDiagram3', [
-            'companyNames' => $companyNames,
         ]);
     }
     
-    public function recoveryDiagram3($nameSociety)
+    public function recoveryDiagram3($id)
     {
 
         $detailMonthSociety = DB::select(
@@ -87,32 +77,44 @@ class DiagramController extends Controller
             FROM bon, fournisseur
             WHERE bon.id_fournisseur = fournisseur.IDfournisseur
             AND YEAR(CAST(NOW() AS DATE)) <= YEAR(validation_dateheure) +1
-            AND societe LIKE :nameSociety
-            GROUP BY annee, mois', ['nameSociety' => $nameSociety]);
-           
-        foreach($detailMonthSociety as $uneSocieteMois){
-                          
-            $mouthSociety[] = $uneSocieteMois -> mois;
-            $totalMoisHtBcSociety[] = $uneSocieteMois -> TotalHt  ;
-        } 
-
-        if(empty($mouthSociety)){
-            $mouthSociety[] = "erreur";
-            $totalMoisHtBcSociety[] = "erreur"  ;
-        }
-
-        return view('diagram3', [
-            'mouthSociety' => $mouthSociety,
-            'totalMoisHtBcSociety' => $totalMoisHtBcSociety,
-            'nameSociety' => $nameSociety,
+            AND IDfournisseur LIKE :id
+            GROUP BY annee, mois', ['id' => $id]);
+              
+        $listSociety = DB::table('Fournisseur')
+                        ->join('bon', 'id_fournisseur', '=', 'fournisseur.IDfournisseur')
+                        ->where('bon.validation_etat','>=', '4')
+                        ->select('fournisseur.societe')
+                        ->get();
+              
+        return view('diagramAffichage', [
+            'detailMonthSociety' => $detailMonthSociety,
+            'listSociety' => $listSociety,
         ]);        
     }
 
-    public function sendSocieteTotalHt()
+    public function recoveryDiagram4()
     {
-        $nameSociety = request('maliste');
-        $nameSociety = str_replace('_', ' ', $nameSociety);
-        
-        return redirect()->route('diagram3', ['nameSociety' => $nameSociety]);
+        $limit = 20;
+
+        $sommeImputation = DB::select('SELECT Lib_FR, SUM(total_ht_bc) AS SommeTotale
+        FROM bon, imputation_2
+        WHERE bon.id_imp2 = imputation_2.IDImputation_2
+        AND validation_etat >= 4
+        AND YEAR(CAST(NOW() AS DATE)) <= YEAR(validation_dateheure) +1
+        GROUP BY Lib_FR
+        Order by SommeTotale DESC
+        LIMIT :limit', ['limit' => $limit]);
+
+        foreach($sommeImputation as $uneSommeImputation)
+        {
+                $nameImputation[] = $uneSommeImputation -> Lib_FR ;
+                $totalImputation[] = $uneSommeImputation -> SommeTotale  ;            
+        }
+
+        return view('diagram4', [
+            'nameImputation' => $nameImputation,
+            'totalImputation' => $totalImputation,
+        ]);
+
     }
 }

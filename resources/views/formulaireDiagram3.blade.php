@@ -1,8 +1,8 @@
 @extends('accueil')
 @section('content')
 
-            <h3>Graphe sur les dépenses des 12 derniers mois de la société </h3>
-            <form method="post"> 
+            <h2>Graphe sur les dépenses des 12 derniers mois de la société </h2>
+            <form  method="post"> 
                 {{ csrf_field() }}
                 <label for="maliste">Séléctionnez une société : </label> 
                 <p><select name="maliste">

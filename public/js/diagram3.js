@@ -6,6 +6,7 @@ var BarChart2 = new Chart(ctx3, {
         labels:  recupMouthSociety ,
         datasets: [
         {
+            borderWidth : 1,
             backgroundColor: tableColor,
             borderColor: 'rgb(0, 0, 0)',
             data: recupTotalMoisHtBcSociety,

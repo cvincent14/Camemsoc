@@ -1,6 +1,6 @@
-var ctx1 = document.getElementById('Diagram1').getContext('2d');
+var ctx4 = document.getElementById('Diagram4').getContext('2d');
 
-var PieChart1 = new Chart(ctx1, {
+var PieChart2 = new Chart(ctx4, {
     type: 'pie',
     data: {
         labels:  recupName ,
@@ -16,6 +16,7 @@ var PieChart1 = new Chart(ctx1, {
     options: {
         legend: {
             display: false
-        }
+        },
+        
     }
 });
