@@ -16,8 +16,9 @@ Route::get('/diagram1', 'DiagramController@recoveryDiagram1');
 
 Route::get('/diagram2', 'DiagramController@recoveryDiagram2');
 
-Route::post('/diagram3/{id}', 'DiagramController@recoveryDiagram3');
+
 Route::get('/diagram3', 'DiagramController@formulaireDiagram3');
+Route::post('/diagram3', 'DiagramController@recoveryDiagram3');
 Route::post('/testest', 'DiagramController@sendSocieteTotalHt');
 
 Route::get('/diagram4', 'DiagramController@recoveryDiagram4');

@@ -9,6 +9,13 @@
                 </select>
                 <button class="btn btn-primary" type="submit">Valider</button>
             </form>
+            <div v-if=' confirmation === true '>
+                <div :key="mois.id" v-for="mois in test">
+                </div>
+                <div class="chart-container" style="position: relative; height:30vh; width:40vw">
+                    <canvas id="Diagram3"></canvas>
+                </div>
+            </div>
             
     </div>
 
@@ -17,21 +24,22 @@
 <script>
 
     export default {
-        props: ['listSociety'],
         data(){
             return{
                 form : {
                     selected : 0,
                 },
+                confirmation : false,
             }
         },  
         methods :{ 
             submitNomSociete(){
-                axios.post('/diagram3/' + this.form.selected, {
-                    
+                axios.post('/diagram3', {
+                    idNomSociete : this.form.selected
                 })
                     .then(({data}) => {
                         this.form.selected = 0
+                        this.confirmation = true
                     })
                     .catch(error => {
                         this.errors = error.response.data.errors

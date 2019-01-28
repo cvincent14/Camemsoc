@@ -62,15 +62,17 @@ class DiagramController extends Controller
     public function formulaireDiagram3()
     {
         $listSociety = Fournisseur::All();
+        $detailMonthSociety = [];
 
         return view('diagramTotalHtParSociete', [
             'listSociety' => $listSociety,
-
+            'detailMonthSociety' => $detailMonthSociety,
         ]);
     }
     
-    public function recoveryDiagram3($id)
+    public function recoveryDiagram3()
     {
+        $idNameSociety = request('idNomSociete');
 
         $detailMonthSociety = DB::select(
             'SELECT SUM(total_ht_bc) AS TotalHt, MONTH(validation_dateheure) AS mois, YEAR(validation_dateheure) AS annee
@@ -78,15 +80,16 @@ class DiagramController extends Controller
             WHERE bon.id_fournisseur = fournisseur.IDfournisseur
             AND YEAR(CAST(NOW() AS DATE)) <= YEAR(validation_dateheure) +1
             AND IDfournisseur LIKE :id
-            GROUP BY annee, mois', ['id' => $id]);
+            GROUP BY annee, mois', ['id' => $idNameSociety]);
               
         $listSociety = DB::table('Fournisseur')
                         ->join('bon', 'id_fournisseur', '=', 'fournisseur.IDfournisseur')
                         ->where('bon.validation_etat','>=', '4')
                         ->select('fournisseur.societe')
                         ->get();
-              
-        return view('diagramAffichage', [
+ 
+          
+        return view('diagramTotalHtParSociete', [
             'detailMonthSociety' => $detailMonthSociety,
             'listSociety' => $listSociety,
         ]);        

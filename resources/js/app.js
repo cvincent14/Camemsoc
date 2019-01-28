@@ -23,7 +23,7 @@ window.Vue = require('vue');
 
 
 Vue.component('diagram-totalhtparsociete', require('./components/DiagramTotalHtParSociete.vue').default);
-Vue.component('diagram-affichage', require('./components/DiagrammeAffichage.vue').default);
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
