@@ -6,7 +6,8 @@
  */
 
 require('./bootstrap');
-require('./Chart.min.js');
+require('./Chart.js');
+require('./RandomColor.js');
 
 window.Vue = require('vue');
 

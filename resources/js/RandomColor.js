@@ -1,18 +1,17 @@
 var randomColor = require('randomcolor');
 
 var color = randomColor();
-var size = 1;
 tableColor = [color];
 
-for(var i = 0; i < size ; i++)
+for(var i = 0; i < 30 ; i++)
 {
-    var color = randomColor();
+    color = randomColor();
     tableColor.push(color);
 }
 
 randomColor({
     luminosity: 'light',
     hue: 'random'
- });
+});
  
  

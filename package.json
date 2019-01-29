@@ -24,6 +24,7 @@
         "vue-template-compiler": "^2.5.22"
     },
     "dependencies": {
+        "chart.js": "^2.7.3",
         "pug": "^2.0.3",
         "randomcolor": "^0.5.3"
     }
